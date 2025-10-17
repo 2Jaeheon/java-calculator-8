@@ -47,9 +47,17 @@ public class ComplexDelimiter implements Delimiter {
     private static String extractUniqueDelimiters(Matcher matcher) {
         String customDelimiterStr = matcher.group(1);
 
+        if (customDelimiterStr.isEmpty()) {
+            throw new IllegalArgumentException("구분자는 비어있을 수 없습니다.");
+        }
+
         Set<Character> uniqueDelimiters = new LinkedHashSet<>();
         for (char c : customDelimiterStr.toCharArray()) {
             uniqueDelimiters.add(c);
+        }
+
+        for (Character delimiterChar : uniqueDelimiters) {
+            DelimiterValidator.validateDelimiter(String.valueOf(delimiterChar));
         }
 
         String customRegexPart = uniqueDelimiters.stream()

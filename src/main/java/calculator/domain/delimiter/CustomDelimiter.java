@@ -44,6 +44,10 @@ public class CustomDelimiter implements Delimiter {
             uniqueDelimiters.add(c);
         }
 
+        for (Character delimiterChar : uniqueDelimiters) {
+            DelimiterValidator.validateDelimiter(String.valueOf(delimiterChar));
+        }
+
         return uniqueDelimiters.stream()
                 .map(c -> Pattern.quote(String.valueOf(c)))
                 .collect(Collectors.joining("|"));

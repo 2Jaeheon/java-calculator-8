@@ -20,12 +20,27 @@ public class Adder implements Calculator {
         }
 
         List<Integer> intNumbers = toInt(numbers);
+        validateNoNegativeNumbers(intNumbers);
         return intNumbers.stream().mapToInt(Integer::intValue).sum();
     }
 
     private List<Integer> toInt(String[] numbers) {
-        return Arrays.stream(numbers)
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        try {
+            return Arrays.stream(numbers)
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("입력 문자열에 숫자가 아닌 문자가 포함되어 있습니다.");
+        }
+    }
+
+    private void validateNoNegativeNumbers(List<Integer> numbers) {
+        List<Integer> negativeNumbers = numbers.stream()
+                .filter(n -> n < 0)
+                .toList();
+
+        if (!negativeNumbers.isEmpty()) {
+            throw new IllegalArgumentException("음수는 계산할 수 없습니다.");
+        }
     }
 }
