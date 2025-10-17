@@ -5,12 +5,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ComplexDelimiter implements Delimiter {
 
     private static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//(.*)\n(.*)");
     private static final Pattern BASIC_DELIMITER_PATTERN = Pattern.compile("[,:]");
-    private static final String BASIC_DELIMITER = ",:";
+    private static final String BASIC_DELIMITER = ",|:";
 
     @Override
     public boolean support(String expression) {
@@ -51,16 +52,11 @@ public class ComplexDelimiter implements Delimiter {
             uniqueDelimiters.add(c);
         }
 
-        StringBuilder regexBuilder = new StringBuilder();
+        String customRegexPart = uniqueDelimiters.stream()
+                .map(c -> Pattern.quote(String.valueOf(c)))
+                .collect(Collectors.joining("|"));
 
-        regexBuilder.append('[');
-        for (Character c : uniqueDelimiters) {
-            regexBuilder.append(c);
-        }
-        regexBuilder.append(BASIC_DELIMITER);
-        regexBuilder.append(']');
-
-        return regexBuilder.toString();
+        return customRegexPart + "|" + BASIC_DELIMITER;
     }
 
 }

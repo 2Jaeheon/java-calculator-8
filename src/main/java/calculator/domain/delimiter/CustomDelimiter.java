@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class CustomDelimiter implements Delimiter {
 
@@ -43,14 +44,8 @@ public class CustomDelimiter implements Delimiter {
             uniqueDelimiters.add(c);
         }
 
-        StringBuilder regexBuilder = new StringBuilder();
-
-        regexBuilder.append('[');
-        for (Character c : uniqueDelimiters) {
-            regexBuilder.append(c);
-        }
-        regexBuilder.append(']');
-
-        return regexBuilder.toString();
+        return uniqueDelimiters.stream()
+                .map(c -> Pattern.quote(String.valueOf(c)))
+                .collect(Collectors.joining("|"));
     }
 }

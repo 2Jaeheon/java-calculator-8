@@ -45,8 +45,8 @@ class BasicDelimiterTest {
         String regex2 = delimiter.getRegex(expression);
 
         // then
-        assertThat(regex).isEqualTo("[,|]");
-        assertThat(regex2).isEqualTo("[,|]");
+        assertThat(regex).isEqualTo(",|:");
+        assertThat(regex2).isEqualTo(",|:");
     }
 
     @Test

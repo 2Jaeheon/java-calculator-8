@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,12 +62,13 @@ class ComplexDelimiterTest {
     void getRegexReturnAlwaysCustomAndBasicDelimiter() {
         // given
         String expression = "//*^\n1:2*3,4";
+        String expectedRegex = Pattern.quote("*") + "|" + Pattern.quote("^") + "|,|:";
 
         // when
         String regex = delimiter.getRegex(expression);
 
         // then
-        assertThat(regex).isEqualTo("[*^,:]");
+        assertThat(regex).isEqualTo(expectedRegex);
     }
 
     @Test
@@ -74,12 +76,13 @@ class ComplexDelimiterTest {
     void getRegexRemoveDuplicatedCustomDelimiter() {
         // given
         String expression = "//***^^^\n1:2*3,4";
+        String expectedRegex = Pattern.quote("*") + "|" + Pattern.quote("^") + "|,|:";
 
         // when
         String regex = delimiter.getRegex(expression);
 
         // then
-        assertThat(regex).isEqualTo("[*^,:]");
+        assertThat(regex).isEqualTo(expectedRegex);
     }
 
     @Test
