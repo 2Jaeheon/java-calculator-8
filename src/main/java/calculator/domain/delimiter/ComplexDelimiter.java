@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class ComplexDelimiter implements Delimiter {
 
-    private static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//(.*)\n(.*)");
+    private static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//(.*)\\\\n(.*)");
     private static final Pattern BASIC_DELIMITER_PATTERN = Pattern.compile("[,:]");
     private static final String BASIC_DELIMITER = ",|:";
 

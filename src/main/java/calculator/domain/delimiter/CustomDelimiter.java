@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class CustomDelimiter implements Delimiter {
 
-    private static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//(.*)\n(.*)");
+    private static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//(.*)\\\\n(.*)");
 
     @Override
     public boolean support(String expression) {
