@@ -39,7 +39,7 @@ class AdderTest {
     @DisplayName("커스텀 구분자가 포함된 문자열의 함계를 계산한다")
     void computeWithCustomDelimiter() {
         // given
-        String expression = "//*\n1*3*6";
+        String expression = "//*\\n1*3*6";
 
         // when
         int calculate = adder.calculate(expression);
@@ -52,7 +52,7 @@ class AdderTest {
     @DisplayName("커스텀 구분자가 있지만 문자열에 구분자가 없는 경우에 합계를 계산한다")
     void computeNoDelimiterInContent() {
         // given
-        String expression = "//$\n1";
+        String expression = "//$\\n1";
 
         // when
         int calculate = adder.calculate(expression);
@@ -62,23 +62,10 @@ class AdderTest {
     }
 
     @Test
-    @DisplayName("복합 구분자가 포함된 문자열의 함계를 계산한다")
-    void computeWithComplexDelimiter() {
-        // given
-        String expression = "//*\n1*3,6";
-
-        // when
-        int calculate = adder.calculate(expression);
-
-        // then
-        assertThat(calculate).isEqualTo(10);
-    }
-
-    @Test
     @DisplayName("음수가 포함된 문자열은 오류를 발생한다")
     void computeWithZeroFromCustomComplexDelimiter() {
         // given
-        String expression = "//*\n1*-4,6";
+        String expression = "//*\\n1*-4*6";
 
         // when & then
         assertThatThrownBy(() -> adder.calculate(expression))
@@ -95,7 +82,7 @@ class AdderTest {
         // when & then
         assertThatThrownBy(() -> adder.calculate(expression))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("입력 문자열에 숫자가 아닌 문자가 포함되어 있습니다.");
+                .hasMessage("입력 문자열에 문제가 있습니다.");
     }
 
     @Test
@@ -107,15 +94,16 @@ class AdderTest {
         // when & then
         assertThatThrownBy(() -> adder.calculate(expression))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("입력 문자열에 숫자가 아닌 문자가 포함되어 있습니다.");
+                .hasMessage("입력 문자열에 문제가 있습니다.");
     }
 
     @Test
     @DisplayName("숫자가 커스텀 구분자로 들어가는 경우 예외를 발생시킨다")
     void computeThrowsExceptionWhenNumberIsCustomDelimiter() {
+        // given
+        String expression = "//3\\n136";
 
-        String expression = "//3\n1*3,6";
-
+        // when & then
         assertThatThrownBy(() -> adder.calculate(expression))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("숫자는 구분자로 사용할 수 없습니다.");
@@ -138,11 +126,35 @@ class AdderTest {
     @DisplayName("커스텀 구분자가 없는 경우 문자열의 합을 구해야 한다")
     void computeReturnSumIfNotCustomDelimiter() {
         // given
-        String expression = "//\n1,3,6";
+        String expression = "//\\n1,3,6";
 
         // when & then
         assertThatThrownBy(() -> adder.calculate(expression))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("구분자는 비어있을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("커스텀 구분자가 없는 경우 문자열의 합을 구해야 한다")
+    void computeReturnSumIfNotCustomDelimiter2() {
+        // given
+        String expression = "//&1,3,6";
+
+        // when & then
+        assertThatThrownBy(() -> adder.calculate(expression))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("잘못된 커스텀 구분자 형식입니다.");
+    }
+
+    @Test
+    @DisplayName("기본 구분자가 존재하는 표현식의 경우 잘못된 문자가 표현된 경우 예외를 출력해야 한다.")
+    void basicDelimiterThrowsExceptionWhenWrongExpression() {
+        // given
+        String expression = "1,2:3*4";
+
+        // when & then
+        assertThatThrownBy(() -> adder.calculate(expression))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입력 문자열에 문제가 있습니다.");
     }
 }

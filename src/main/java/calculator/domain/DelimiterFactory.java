@@ -1,7 +1,6 @@
 package calculator.domain;
 
 import calculator.domain.delimiter.BasicDelimiter;
-import calculator.domain.delimiter.ComplexDelimiter;
 import calculator.domain.delimiter.CustomDelimiter;
 import calculator.domain.delimiter.Delimiter;
 import java.util.Arrays;
@@ -13,9 +12,8 @@ public class DelimiterFactory {
 
     public DelimiterFactory() {
         this.delimiters = Arrays.asList(
-            new ComplexDelimiter(),
-            new CustomDelimiter(),
-            new BasicDelimiter()
+                new CustomDelimiter(),
+                new BasicDelimiter()
         );
     }
 

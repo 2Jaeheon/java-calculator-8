@@ -19,10 +19,15 @@ public class CustomDelimiter implements Delimiter {
     @Override
     public String getRegex(String expression) {
         Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(expression);
+
         if (!matcher.find()) {
-            return "";
+            throw new IllegalArgumentException("잘못된 커스텀 구분자 형식입니다.");
         }
-        return extractUniqueDelimiters(matcher);
+
+        String delimiter = matcher.group(1);
+
+        DelimiterValidator.validateDelimiter(delimiter);
+        return Pattern.quote(delimiter);
     }
 
     @Override
@@ -34,22 +39,5 @@ public class CustomDelimiter implements Delimiter {
         }
 
         return expression;
-    }
-
-    private String extractUniqueDelimiters(Matcher matcher) {
-        String customDelimiterStr = matcher.group(1);
-
-        Set<Character> uniqueDelimiters = new LinkedHashSet<>();
-        for (char c : customDelimiterStr.toCharArray()) {
-            uniqueDelimiters.add(c);
-        }
-
-        for (Character delimiterChar : uniqueDelimiters) {
-            DelimiterValidator.validateDelimiter(String.valueOf(delimiterChar));
-        }
-
-        return uniqueDelimiters.stream()
-                .map(c -> Pattern.quote(String.valueOf(c)))
-                .collect(Collectors.joining("|"));
     }
 }

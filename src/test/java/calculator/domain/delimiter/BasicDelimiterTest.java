@@ -2,6 +2,7 @@ package calculator.domain.delimiter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,15 +23,13 @@ class BasicDelimiterTest {
     void supportAlwaysTrue() {
         // given
         String expression = "1,2:3";
-        String expression2 = "//*\n1*2!3";
+        boolean expected = true;
 
         // when
-        boolean isSupport = delimiter.support(expression);
-        boolean isSupport2 = delimiter.support(expression);
+        boolean support = delimiter.support(expression);
 
         // then
-        Assertions.assertTrue(isSupport);
-        Assertions.assertTrue(isSupport2);
+        assertThat(support).isEqualTo(expected);
     }
 
     @Test
@@ -38,15 +37,13 @@ class BasicDelimiterTest {
     void getRegexReturnAlwaysDefaultRegex() {
         // given
         String expression = "1,2:3";
-        String expression2 = "1\32\4/23*2";
+        String expected = ",|:";
 
         // when
         String regex = delimiter.getRegex(expression);
-        String regex2 = delimiter.getRegex(expression);
 
         // then
-        assertThat(regex).isEqualTo(",|:");
-        assertThat(regex2).isEqualTo(",|:");
+        assertThat(regex).isEqualTo(expected);
     }
 
     @Test
@@ -54,14 +51,12 @@ class BasicDelimiterTest {
     void getContentReturnAlwaysDefaultContent() {
         // given
         String expression = "1,2:3";
-        String expression2 = "//*\n1*2!3";
+        String expected = "1,2:3";
 
         // when
         String content = delimiter.getContent(expression);
-        String content2 = delimiter.getContent(expression2);
 
         // then
-        assertThat(content).isEqualTo("1,2:3");
-        assertThat(content2).isNotEqualTo("content");
+        assertThat(content).isEqualTo(expected);
     }
 }

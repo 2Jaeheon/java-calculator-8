@@ -16,6 +16,7 @@ public class BasicDelimiter implements Delimiter {
 
     @Override
     public String getContent(String expression) {
+
         return expression;
     }
 }
