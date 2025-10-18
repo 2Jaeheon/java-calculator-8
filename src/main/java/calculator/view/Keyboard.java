@@ -1,5 +1,9 @@
 package calculator.view;
 
-public class Keyboard {
+import camp.nextstep.edu.missionutils.Console;
 
+public class Keyboard {
+    public String read() {
+        return Console.readLine();
+    }
 }
