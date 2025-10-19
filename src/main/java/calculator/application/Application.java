@@ -1,11 +1,9 @@
-package calculator;
+package calculator.application;
 
-import calculator.application.CalculateController;
 import calculator.domain.Adder;
 import calculator.domain.Calculator;
 import calculator.domain.DelimiterFactory;
 import calculator.domain.Splitter;
-import calculator.domain.delimiter.Delimiter;
 import calculator.view.Keyboard;
 import calculator.view.Screen;
 
