@@ -20,41 +20,41 @@ class DelimiterFactoryTest {
     }
 
     @Test
-    @DisplayName("커스텀 구분자만 사용된 경우 CustomDelimiter를 반환해야 한다")
-    void findDelimiterForReturnCustomDelimiterForCustomCase() {
+    @DisplayName("findDelimiterFor()은 커스텀 구분자만 사용된 경우 CustomDelimiter를 반환해야 한다.")
+    void findDelimiter_customExpression_customDelimiter() {
         // given
         String expression = "//;\\n1;2;3";
 
         // when
-        Delimiter delimiter = delimiterFactory.findDelimiterFor(expression);
+        Delimiter actual = delimiterFactory.findDelimiterFor(expression);
 
         // then
-        assertThat(delimiter).isInstanceOf(CustomDelimiter.class);
+        assertThat(actual).isInstanceOf(CustomDelimiter.class);
     }
 
     @Test
-    @DisplayName("기본 구분자만 사용된 경우 BasicDelimiter를 반환해야 한다")
-    void findDelimiterForReturnBasicDelimiterForBasicCase() {
+    @DisplayName("findDelimiterFor()은 기본 구분자만 사용된 경우 BasicDelimiter를 반환해야 한다.")
+    void findDelimiterFor_basicExpression_basicDelimiter() {
         // given
         String expression = "1,2:3";
 
         // when
-        Delimiter delimiter = delimiterFactory.findDelimiterFor(expression);
+        Delimiter actual = delimiterFactory.findDelimiterFor(expression);
 
         // then
-        assertThat(delimiter).isInstanceOf(BasicDelimiter.class);
+        assertThat(actual).isInstanceOf(BasicDelimiter.class);
     }
 
     @Test
-    @DisplayName("빈 문자열의 경우에는 basicDelimiter를 반환해야 한다")
-    void findDelimiterForReturnBasicDelimiterForEmptyExpression() {
+    @DisplayName("findDelimiterFor()은 빈 문자열의 경우에 basicDelimiter를 반환해야 한다.")
+    void findDelimiterFor_nonExpression_BasicDelimiter() {
         // given
         String expression = "";
 
         // when
-        Delimiter delimiter = delimiterFactory.findDelimiterFor(expression);
+        Delimiter actual = delimiterFactory.findDelimiterFor(expression);
 
         // then
-        assertThat(delimiter).isInstanceOf(BasicDelimiter.class);
+        assertThat(actual).isInstanceOf(BasicDelimiter.class);
     }
 }

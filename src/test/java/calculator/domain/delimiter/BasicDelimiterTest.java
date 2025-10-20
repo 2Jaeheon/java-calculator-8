@@ -19,22 +19,22 @@ class BasicDelimiterTest {
     }
 
     @Test
-    @DisplayName("support() 메서드는 언제나 true를 반환한다")
-    void supportAlwaysTrue() {
+    @DisplayName("support()는 어떤 입력에도 true를 반환한다")
+    void support_alwaysTrue() {
         // given
         String expression = "1,2:3";
         boolean expected = true;
 
         // when
-        boolean support = delimiter.support(expression);
+        boolean actual = delimiter.support(expression);
 
         // then
-        assertThat(support).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("tokenize() 메서드는 문자를 분리해야 한다")
-    void tokenizeAlwaysReturnTokenizedValues() {
+    @DisplayName("tokenize() 메서드는 문자를 기본 구분자로 분리해야 한다")
+    void tokenize_basicDelimiter() {
         // given
         String expression = "1,2:3";
         String[] expected = new String[]{"1", "2", "3"};
@@ -47,30 +47,30 @@ class BasicDelimiterTest {
     }
 
     @Test
-    @DisplayName("입력값이 빈 문자열인 경우에는 빈 문자열을 반환한다")
-    void tokenizeReturnEmptyStringArrayWhenExpressionIsEmpty() {
+    @DisplayName("tokenize()는 입력값이 빈 문자열인 경우에 빈 문자열을 반환한다")
+    void tokenize_emptyExpression() {
         // given
         String expression = "";
         String[] expected = new String[]{""};
 
         // when
-        String[] tokenize = delimiter.tokenize(expression);
+        String[] actual = delimiter.tokenize(expression);
 
         // then
-        assertThat(tokenize).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("입력값이 1:2, 와 같은 경우에 마지막 빈 문자열이 분리되어야 한다")
-    void tokenizeReturnTrailingEmptyTokenWhenExpressionEndsWithDelimiter() {
+    @DisplayName("tokenize()는 입력값이 1:2, 와 같은 경우에 마지막 빈 문자열이 분리되어야 한다")
+    void tokenize_trailingDelimiter() {
         // given
         String expression = "1,2:";
         String[] expected = new String[]{"1", "2", ""};
 
         // when
-        String[] tokenize = delimiter.tokenize(expression);
+        String[] actual = delimiter.tokenize(expression);
 
         // then
-        assertThat(tokenize).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 }

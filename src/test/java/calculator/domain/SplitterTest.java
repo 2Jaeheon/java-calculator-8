@@ -19,28 +19,30 @@ class SplitterTest {
     }
 
     @Test
-    @DisplayName("커스텀 표현식은 커스텀 구분자로 분리해야 한다")
-    void splitFromCustomDelimiter() {
+    @DisplayName("커스텀 표현식은 커스텀 구분자로 분리해야 한다.")
+    void split_customExpression_splitValues() {
         // given
         String expression = "//*\\n7*2*3";
+        String[] expected = new String[]{"7", "2", "3"};
 
         // when
-        String[] split = splitter.split(expression);
+        String[] actual = splitter.split(expression);
 
         // then
-        assertThat(split).isEqualTo(new String[]{"7", "2", "3"});
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("기본 표현식은 기본 구분자로 분리해야 한다")
-    void splitFromBasicDelimiter() {
+    @DisplayName("기본 표현식은 기본 구분자로 분리해야 한다.")
+    void split_basicDelimiter_splitValues() {
         // given
         String expression = "1,2:3";
+        String[] expected = new String[]{"1", "2", "3"};
 
         // when
-        String[] split = splitter.split(expression);
+        String[] actual = splitter.split(expression);
 
         // then
-        assertThat(split).isEqualTo(new String[]{"1", "2", "3"});
+        assertThat(actual).isEqualTo(expected);
     }
 }

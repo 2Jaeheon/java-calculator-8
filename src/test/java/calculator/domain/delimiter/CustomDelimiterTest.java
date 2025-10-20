@@ -19,8 +19,8 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("support() 메서드는 //로 시작할 때만 true를 반환한다")
-    void customDelimiterAlwaysStartWithDoubleSlash() {
+    @DisplayName("support() 메서드는 //로 시작할 때 true를 반환한다.")
+    void support_startWithDoubleSlash_true() {
         // given
         String expression = "//_\\n3_4";
 
@@ -32,8 +32,8 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("support() 메서드는 //로 시작하지 않으면 false를 반환한다")
-    void customDelimiterMustStartWithDoubleSlash() {
+    @DisplayName("support() 메서드는 //로 시작하지 않으면 false를 반환한다.")
+    void support_notStartWithDoubleSlash_false() {
         // given
         String expression = "1,2:3";
 
@@ -45,8 +45,22 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("tokenize()는 문자열을 분리해서 반환해야 한다")
-    void tokenizeReturnTokenizedValues() {
+    @DisplayName("tokenize()는 끝에 구분자가 있으면 빈 토큰을 포함해야 한다.")
+    void tokenize_trailingDelimiter_includesEmptyToken() {
+        // given
+        String expression = "//*\\n1*2*";
+        String[] expected = {"1", "2", ""};
+
+        // when
+        String[] actual = delimiter.tokenize(expression);
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("tokenize()는 문자열을 커스텀 구분자로 분리해서 반환해야 한다.")
+    void tokenize_customDelimiter() {
         // given
         String expression = "//*\\n1*3*5";
         String[] expected = new String[]{"1", "3", "5"};
@@ -59,8 +73,8 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("커스텀 구분자가 없는 경우 예외를 발생해야 한다")
-    void tokenizeThrowExceptionWhenNonCustomDelimiter() {
+    @DisplayName("tokenize()는 커스텀 구분자가 없는 경우 예외를 발생해야 한다")
+    void tokenize_emptyDelimiter_throws() {
         // given
         String expression = "//\\n3_4";
 
@@ -71,8 +85,8 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("커스텀 구분자가 하나가 아닌 경우 예외를 발생해야 한다")
-    void customDelimiterMustOneCharacter() {
+    @DisplayName("tokenize()는 커스텀 구분자가 하나가 아닌 경우 예외를 발생해야 한다")
+    void tokenize_multiCharacterDelimiter_throws() {
         // given
         String expression = "//**\\n3*4";
 
@@ -83,8 +97,8 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("커스텀 구분자의 형식이 잘못된 경우 예외를 발생해야 한다")
-    void customDelimiterThrowExceptionWhenWrongCustomDelimiterFormat() {
+    @DisplayName("tokenize()는 커스텀 구분자의 형식이 잘못된 경우 예외를 발생해야 한다")
+    void tokenize_wrongDelimiterFormat_throws() {
         // given
         String expression = "//*\n3*4";
 
@@ -95,8 +109,8 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("커스텀 구분자가 숫자인 경우 예외를 발생해야 한다")
-    void customDelimiterThrowExceptionWhenCustomDelimiterIsNumber() {
+    @DisplayName("tokenize()는 커스텀 구분자가 숫자인 경우 예외를 발생해야 한다")
+    void tokenize_delimiterIsNumber_throws() {
         // given
         String expression = "//2\\n524";
 
