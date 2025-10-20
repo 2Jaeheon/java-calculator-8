@@ -13,31 +13,23 @@ public class CustomDelimiter implements Delimiter {
 
     @Override
     public boolean support(String expression) {
-        return expression.startsWith("//");
+        return expression != null && expression.startsWith("//");
     }
 
     @Override
-    public String getRegex(String expression) {
+    public String[] tokenize(String expression) {
         Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(expression);
 
-        if (!matcher.find()) {
+        if (!matcher.matches()) {
             throw new IllegalArgumentException("잘못된 커스텀 구분자 형식입니다.");
         }
 
         String delimiter = matcher.group(1);
+        String content = matcher.group(2);
 
         DelimiterValidator.validateDelimiter(delimiter);
-        return Pattern.quote(delimiter);
-    }
 
-    @Override
-    public String getContent(String expression) {
-        Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(expression);
-
-        if (matcher.find()) {
-            return matcher.group(2);
-        }
-
-        return expression;
+        String regex = Pattern.quote(delimiter);
+        return content.split(regex);
     }
 }

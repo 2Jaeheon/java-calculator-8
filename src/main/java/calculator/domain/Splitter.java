@@ -16,9 +16,6 @@ public class Splitter {
 
         Delimiter delimiter = delimiterFactory.findDelimiterFor(expression);
 
-        String regex = delimiter.getRegex(expression);
-        String content = delimiter.getContent(expression);
-
-        return content.split(regex);
+        return delimiter.tokenize(expression);
     }
 }

@@ -68,8 +68,7 @@ class AdderTest {
         String expression = "//*\\n1*-4*6";
 
         // when & then
-        assertThatThrownBy(() -> adder.calculate(expression))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("음수는 계산할 수 없습니다.");
     }
 
@@ -80,20 +79,18 @@ class AdderTest {
         String expression = "1,,2";
 
         // when & then
-        assertThatThrownBy(() -> adder.calculate(expression))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("입력 문자열에 문제가 있습니다.");
     }
 
     @Test
     @DisplayName("숫자가 아닌 문자가 포함된 경우 예외를 발생시킨다")
-    void compute_throws_exception_for_non_numeric_input() {
+    void computeThrowsExceptionWhenNonDigitContains() {
         // given
         String expression = "1,a,2";
 
         // when & then
-        assertThatThrownBy(() -> adder.calculate(expression))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("입력 문자열에 문제가 있습니다.");
     }
 
@@ -104,8 +101,7 @@ class AdderTest {
         String expression = "//3\\n136";
 
         // when & then
-        assertThatThrownBy(() -> adder.calculate(expression))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("숫자는 구분자로 사용할 수 없습니다.");
     }
 
@@ -129,8 +125,7 @@ class AdderTest {
         String expression = "//\\n1,3,6";
 
         // when & then
-        assertThatThrownBy(() -> adder.calculate(expression))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("구분자는 비어있을 수 없습니다.");
     }
 
@@ -141,8 +136,7 @@ class AdderTest {
         String expression = "//&1,3,6";
 
         // when & then
-        assertThatThrownBy(() -> adder.calculate(expression))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("잘못된 커스텀 구분자 형식입니다.");
     }
 
@@ -153,8 +147,53 @@ class AdderTest {
         String expression = "1,2:3*4";
 
         // when & then
-        assertThatThrownBy(() -> adder.calculate(expression))
-                .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("입력 문자열에 문제가 있습니다.");
+    }
+
+    @Test
+    @DisplayName("연속 구분자 1,,2는 예외를 발생시킨다")
+    void AdderRejectsConsecutiveDelimiter() {
+        // given
+        String expression = "1,,2";
+
+        // when & then
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입력 문자열에 문제가 있습니다.");
+    }
+
+    @Test
+    @DisplayName("공백이 포함된 입력 1 , 2 는 예외를 발생시킨다")
+    void AdderRejectsWhitespaces() {
+        // given
+        String expression = " 1 , 2 ";
+
+        // when & then
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입력 문자열에 문제가 있습니다.");
+    }
+
+    @Test
+    @DisplayName("마지막 구분자 1,2, 는 예외를 발생시킨다")
+    void AdderRejectTrailingDelimiter() {
+        // given
+        String expression = "1,2,";
+
+        // when & then
+        assertThatThrownBy(() -> adder.calculate(expression)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("입력 문자열에 문제가 있습니다.");
+    }
+
+    @Test
+    @DisplayName("입력값이 null 인 경우 0을 반환한다")
+    void AdderReturnZeroWhenExpressionIsNull() {
+        // given
+        String expression = null;
+
+        // when
+        int result = adder.calculate(expression);
+
+        // then
+        assertThat(result).isZero();
     }
 }

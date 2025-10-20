@@ -1,5 +1,7 @@
 package calculator.domain.delimiter;
 
+import java.util.Arrays;
+
 public class BasicDelimiter implements Delimiter {
 
     private static final String BASIC_DELIMITER_REGEX = ",|:";
@@ -10,13 +12,7 @@ public class BasicDelimiter implements Delimiter {
     }
 
     @Override
-    public String getRegex(String expression) {
-        return BASIC_DELIMITER_REGEX;
-    }
-
-    @Override
-    public String getContent(String expression) {
-
-        return expression;
+    public String[] tokenize(String expression) {
+        return expression.split(BASIC_DELIMITER_REGEX, -1);
     }
 }

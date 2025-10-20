@@ -33,30 +33,44 @@ class BasicDelimiterTest {
     }
 
     @Test
-    @DisplayName("getRegex() 메서드는 항상 기본 구분자 정규표현식을 반환해야 한다")
-    void getRegexReturnAlwaysDefaultRegex() {
+    @DisplayName("tokenize() 메서드는 문자를 분리해야 한다")
+    void tokenizeAlwaysReturnTokenizedValues() {
         // given
         String expression = "1,2:3";
-        String expected = ",|:";
+        String[] expected = new String[]{"1", "2", "3"};
 
         // when
-        String regex = delimiter.getRegex(expression);
+        String[] tokenize = delimiter.tokenize(expression);
 
         // then
-        assertThat(regex).isEqualTo(expected);
+        assertThat(tokenize).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("getContent() 메서드는 항상 기본 식을 반환해야 한다")
-    void getContentReturnAlwaysDefaultContent() {
+    @DisplayName("입력값이 빈 문자열인 경우에는 빈 문자열을 반환한다")
+    void tokenizeReturnEmptyStringArrayWhenExpressionIsEmpty() {
         // given
-        String expression = "1,2:3";
-        String expected = "1,2:3";
+        String expression = "";
+        String[] expected = new String[]{""};
 
         // when
-        String content = delimiter.getContent(expression);
+        String[] tokenize = delimiter.tokenize(expression);
 
         // then
-        assertThat(content).isEqualTo(expected);
+        assertThat(tokenize).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("입력값이 1:2, 와 같은 경우에 마지막 빈 문자열이 분리되어야 한다")
+    void tokenizeReturnTrailingEmptyTokenWhenExpressionEndsWithDelimiter() {
+        // given
+        String expression = "1,2:";
+        String[] expected = new String[]{"1", "2", ""};
+
+        // when
+        String[] tokenize = delimiter.tokenize(expression);
+
+        // then
+        assertThat(tokenize).isEqualTo(expected);
     }
 }

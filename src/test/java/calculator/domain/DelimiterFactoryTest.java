@@ -44,4 +44,17 @@ class DelimiterFactoryTest {
         // then
         assertThat(delimiter).isInstanceOf(BasicDelimiter.class);
     }
+
+    @Test
+    @DisplayName("빈 문자열의 경우에는 basicDelimiter를 반환해야 한다")
+    void findDelimiterForReturnBasicDelimiterForEmptyExpression() {
+        // given
+        String expression = "";
+
+        // when
+        Delimiter delimiter = delimiterFactory.findDelimiterFor(expression);
+
+        // then
+        assertThat(delimiter).isInstanceOf(BasicDelimiter.class);
+    }
 }

@@ -45,66 +45,64 @@ class CustomDelimiterTest {
     }
 
     @Test
-    @DisplayName("getRegex() 메서드는 반드시 커스텀 구분자 정규표현식을 반환한다")
-    void getRegexReturnAlwaysCustomDelimiter() {
+    @DisplayName("tokenize()는 문자열을 분리해서 반환해야 한다")
+    void tokenizeReturnTokenizedValues() {
         // given
-        String expression = "//*\\n1*2*3";
-        String expected = Pattern.quote("*");
+        String expression = "//*\\n1*3*5";
+        String[] expected = new String[]{"1", "3", "5"};
 
         // when
-        String regex = delimiter.getRegex(expression);
+        String[] tokenize = delimiter.tokenize(expression);
 
         // then
-        assertThat(regex).isEqualTo(expected);
-    }
-
-    @DisplayName("getContent 메서드는 커스텀 구분자 선언부를 제외한 내용물을 반환한다")
-    @Test
-    void getContentReturnContent() {
-        // given
-        String expression = "//;\\n1;2;3";
-
-        // when
-        String content = delimiter.getContent(expression);
-
-        // then
-        assertThat(content).isEqualTo("1;2;3");
+        assertThat(tokenize).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("커스텀 구분자가 여러 개인 경우 예외를 반한한다")
-    void getRegexReturnMultiCustomDelimiter() {
+    @DisplayName("커스텀 구분자가 없는 경우 예외를 발생해야 한다")
+    void tokenizeThrowExceptionWhenNonCustomDelimiter() {
         // given
-        String expression = "//;&^\\n1;2&3^5";
+        String expression = "//\\n3_4";
 
         // when & then
-        assertThatThrownBy(() -> delimiter.getRegex(expression))
+        assertThatThrownBy(() -> delimiter.tokenize(expression))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("구분자는 비어있을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("커스텀 구분자가 하나가 아닌 경우 예외를 발생해야 한다")
+    void customDelimiterMustOneCharacter() {
+        // given
+        String expression = "//**\\n3*4";
+
+        // when & then
+        assertThatThrownBy(() -> delimiter.tokenize(expression))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("커스텀 구분자는 한 글자여야 합니다.");
-
     }
 
     @Test
-    @DisplayName("커스텀 구분자 형식이 잘못된 경우 예외를 발생한다.")
-    void getRegexThrowsExceptionWhenWrongCustomDelimiter() {
+    @DisplayName("커스텀 구분자의 형식이 잘못된 경우 예외를 발생해야 한다")
+    void customDelimiterThrowExceptionWhenWrongCustomDelimiterFormat() {
         // given
-        String expression = "//;*n1;2;3";
+        String expression = "//*\n3*4";
 
         // when & then
-        assertThatThrownBy(() -> delimiter.getRegex(expression))
+        assertThatThrownBy(() -> delimiter.tokenize(expression))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("잘못된 커스텀 구분자 형식입니다.");
     }
 
     @Test
-    @DisplayName("커스텀 구분자가 비어있다면 예외를 발생한다.")
-    void getRegexThrowsExceptionWhenEmptyCustomDelimiter() {
+    @DisplayName("커스텀 구분자가 숫자인 경우 예외를 발생해야 한다")
+    void customDelimiterThrowExceptionWhenCustomDelimiterIsNumber() {
         // given
-        String expression = "//\\n1;2;3";
+        String expression = "//2\\n524";
 
-        // when & then
-        assertThatThrownBy(() -> delimiter.getRegex(expression))
+        // when
+        assertThatThrownBy(() -> delimiter.tokenize(expression))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("구분자는 비어있을 수 없습니다.");
+                .hasMessage("숫자는 구분자로 사용할 수 없습니다.");
     }
 }
