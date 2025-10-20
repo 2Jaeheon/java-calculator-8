@@ -1,5 +1,6 @@
-package calculator.application;
+package calculator;
 
+import calculator.application.CalculateController;
 import calculator.domain.Adder;
 import calculator.domain.Calculator;
 import calculator.domain.DelimiterFactory;
