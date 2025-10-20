@@ -30,6 +30,6 @@ public class CustomDelimiter implements Delimiter {
         DelimiterValidator.validateDelimiter(delimiter);
 
         String regex = Pattern.quote(delimiter);
-        return content.split(regex);
+        return content.split(regex, -1);
     }
 }
